@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-3">
-              <Seal className="h-14 w-14" onPurple />
+              <Seal className="h-14 w-auto" />
               <span className="font-serif text-base leading-tight">
                 Nationwide School
                 <span className="block text-[11px] font-sans text-gold-500">for Academic Excellence</span>
@@ -56,7 +56,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {new Date().getFullYear()} Nationwide School for Academic Excellence. All rights reserved.</p>
           <p>Primary and High School &middot; Grade 0–12</p>
         </div>

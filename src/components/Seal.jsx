@@ -1,18 +1,12 @@
-// Real school crest (public/logo.png), exactly as supplied — no
-// re-editing of the artwork. Its background is white, so on a purple
-// surface (header, footer, portal) it sits inside a white disc, the way
-// a printed badge or seal normally would, rather than looking like a
-// broken cutout.
-export default function Seal({ className = 'h-10 w-10', onPurple = false }) {
-  const img = <img src="/logo.png" alt="Nationwide School for Academic Excellence crest" className="h-full w-full object-contain" />;
-
-  if (!onPurple) {
-    return <span className={`${className} inline-block`}>{img}</span>;
-  }
-
+// Real school crest (public/logo.png), trimmed to its content with a
+// smooth (anti-aliased) transparent background — sits cleanly on both
+// light and purple surfaces without a white box or jagged edges.
+export default function Seal({ className = 'h-10 w-10' }) {
   return (
-    <span className={`${className} inline-flex items-center justify-center rounded-full bg-white p-1`}>
-      {img}
-    </span>
+    <img
+      src="/logo.png"
+      alt="Nationwide School for Academic Excellence crest"
+      className={`${className} object-contain`}
+    />
   );
 }
