@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-3">
-              <Seal className="h-10 w-10" />
+              <Seal className="h-14 w-14" onPurple />
               <span className="font-serif text-base leading-tight">
                 Nationwide School
                 <span className="block text-[11px] font-sans text-gold-500">for Academic Excellence</span>
