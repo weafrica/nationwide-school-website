@@ -41,8 +41,16 @@ export default function Contact() {
               </div>
             </dl>
 
-            <div className="mt-8 h-56 rounded-sm border border-purple-100 bg-lavender-50 flex items-center justify-center text-sm text-ink/50">
-              Map of 322 Main Street, Jeppestown
+            <div className="mt-8 h-56 overflow-hidden rounded-sm border border-purple-100">
+              <iframe
+                title="Map of 322 Main Street, Jeppestown"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=322+Main+Street,+Jeppestown,+Johannesburg&output=embed"
+              />
             </div>
           </div>
 
@@ -80,6 +88,26 @@ export default function Contact() {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-lavender-50 py-14">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="font-serif text-2xl text-purple-900">Before you visit</h2>
+          <div className="mt-6 grid gap-6 sm:grid-cols-3">
+            <div>
+              <p className="font-semibold text-purple-900">Walk-ins welcome</p>
+              <p className="mt-1 text-sm text-ink/70">No appointment needed for a school tour during reception hours.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-purple-900">Bring registration documents</p>
+              <p className="mt-1 text-sm text-ink/70">If you're ready to register the same day, see the document checklist on the Admissions page.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-purple-900">Parking on site</p>
+              <p className="mt-1 text-sm text-ink/70">Visitor parking is available at the Main Street entrance.</p>
+            </div>
           </div>
         </div>
       </section>

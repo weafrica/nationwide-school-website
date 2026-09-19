@@ -86,6 +86,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Leadership message */}
+      <section className="bg-purple-900 py-16 text-white lg:py-20">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <p className="font-serif text-sm text-gold-500">A note from the Principal</p>
+          <p className="mt-4 font-serif text-2xl leading-relaxed sm:text-3xl">
+            "We don't ask what a child arrives knowing. We ask what they'll leave knowing how
+            to do — and we hold that standard from Grade 0 all the way to their last matric
+            exam."
+          </p>
+        </div>
+      </section>
+
       {/* Academic phases */}
       <section className="bg-lavender-50 py-16 lg:py-24">
         <div className="mx-auto max-w-6xl px-6">
@@ -103,6 +115,30 @@ export default function Home() {
             See the full academic programme &rarr;
           </Link>
         </div>
+      </section>
+
+      {/* Life at Nationwide */}
+      <section className="mx-auto max-w-6xl px-6 py-16 lg:py-24">
+        <h2 className="font-serif text-3xl text-purple-900">Life at Nationwide</h2>
+        <p className="mt-2 max-w-2xl text-[15px] text-ink/70">
+          Matric results are the headline. This is what fills the years that lead up to it.
+        </p>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { title: 'Sport', desc: 'Soccer, netball, athletics and inter-house days.' },
+            { title: 'Clubs', desc: 'Debate, chess, coding and student council.' },
+            { title: 'Arts', desc: 'Choir, drama and an annual showcase.' },
+            { title: 'Support', desc: 'Free extra lessons and extension work, after school.' },
+          ].map((item) => (
+            <div key={item.title} className="rounded-sm bg-lavender-50 p-6">
+              <h3 className="font-serif text-lg text-purple-900">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink/70">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <Link to="/academics" className="mt-8 inline-block font-semibold text-purple-600 hover:text-purple-900">
+          More about student life &rarr;
+        </Link>
       </section>
 
       {/* Admissions CTA band */}
