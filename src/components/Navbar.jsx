@@ -17,7 +17,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-purple-100 bg-paper/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <Seal className="h-11 w-11 shrink-0" />
+          <Seal className="h-12 w-auto shrink-0" />
           <span className="font-serif text-lg leading-tight text-purple-900">
             Nationwide School
             <span className="block text-[11px] font-sans font-medium tracking-wide text-gold-600">
