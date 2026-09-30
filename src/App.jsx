@@ -14,7 +14,7 @@ import PortalGate from './portal/PortalGate';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return null;
 }
 
@@ -92,8 +92,8 @@ export default function App() {
       )}
       <main className="flex-1">
         {/* key={pathname} forces every page to fully remount on each
-            navigation — including via the Back button or the browser's
-            own back/forward — so page state (scroll position, open
+            navigation â€” including via the Back button or the browser's
+            own back/forward â€” so page state (scroll position, open
             accordions, form fields) always starts fresh rather than
             carrying over stale state from a previous visit. */}
         <Routes location={location} key={location.pathname}>
