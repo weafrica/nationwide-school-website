@@ -1,8 +1,8 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function getInitialTheme() {
   if (typeof window === 'undefined') return 'dark';
-  return localStorage.getItem('theme') || 'dark';
+  return localStorage.getItem('theme') || 'light';
 }
 
 export default function ThemeToggle({ className = '' }) {
