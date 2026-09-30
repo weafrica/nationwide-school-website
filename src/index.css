@@ -14,17 +14,21 @@
   --color-paper: #FCFBFE;
   --color-lavender-50: #F2ECFB;
   --color-surface: #FFFFFF;
+  --color-lilac: #D9C7F5;
 
   --font-serif: 'Fraunces', serif;
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 
+/* Dark theme: a deep plum (same hue family as the brand purple, not a
+   flat black), soft lilac headings, gold links — so the accent color
+   already used for CTAs carries through instead of fading to gray. */
 .dark {
-  --color-ink: #F3EFFA;
-  --color-paper: #150F21;
-  --color-purple-100: #3A2C58;
-  --color-lavender-50: #241A38;
-  --color-surface: #1E1730;
+  --color-ink: #F1EAFB;
+  --color-paper: #1A1030;
+  --color-purple-100: #3D2E5C;
+  --color-lavender-50: #2A1F47;
+  --color-surface: #241A3D;
 }
 
 body {
@@ -56,4 +60,25 @@ body {
 .input:focus {
   outline: 2px solid var(--color-gold-600);
   outline-offset: 1px;
+}
+
+/* purple-900/600 are used both as background fills (buttons, hero
+   bands -- must stay put) and as text color for headings/links on
+   light surfaces (must lighten in dark mode). These target only the
+   text usage. :not(.bg-gold-500) protects the one case where dark
+   purple-900 text sits on a gold badge/button and must stay dark. */
+.dark .text-purple-900:not(.bg-gold-500) {
+  color: var(--color-lilac);
+}
+.dark .hover\:text-purple-900:hover:not(.bg-gold-500) {
+  color: var(--color-gold-600);
+}
+.dark .text-purple-600 {
+  color: var(--color-gold-500);
+}
+.dark .hover\:text-purple-600:hover {
+  color: var(--color-gold-600);
+}
+.dark .bg-white {
+  background-color: var(--color-surface);
 }
