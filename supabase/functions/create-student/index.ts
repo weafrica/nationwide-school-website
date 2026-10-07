@@ -28,14 +28,6 @@ function randomPassword() {
   return out;
 }
 
-function slugify(name: string) {
-  return name
-    .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
-    .replace(/[^a-z0-9]+/g, '.')
-    .replace(/^\.+|\.+$/g, '');
-}
-
 Deno.serve(async (req) => {
   const cors = {
     'Access-Control-Allow-Origin': '*',
@@ -94,16 +86,25 @@ Deno.serve(async (req) => {
       email: loginEmail,
       password,
       email_confirm: true,
-      user_metadata: { full_name: fullName, preset_role: 'student' },
+      user_metadata: { full_name: fullName },
+      // preset_role MUST be app_metadata, never user_metadata: the
+      // handle_new_user trigger (migrations/20260928100100) only reads
+      // preset_role from app_metadata, specifically because
+      // user_metadata is attacker-controlled -- anyone signing themselves
+      // up could otherwise set user_metadata.preset_role=admin. (Tested:
+      // with this in user_metadata instead, the new profile would
+      // silently stay role=pending forever -- the student login would
+      // never actually work.)
+      app_metadata: { preset_role: 'student' },
     });
     if (createErr || !created?.user) {
       return new Response(JSON.stringify({ error: createErr?.message || 'Could not create the login.' }), { status: 500, headers: cors });
     }
 
-    // The trigger in 001_schema.sql already inserted a `profiles` row
-    // with role='student' (from preset_role above). Now attach the
-    // student-specific record and flag that they must change their
-    // password on first login.
+    // The handle_new_user trigger (migrations/20260928100100) already
+    // inserted a `profiles` row with role='student' (from app_metadata
+    // above). Now attach the student-specific record and flag that they
+    // must change their password on first login.
     const { error: studentErr } = await admin.from('students').insert({
       user_id: created.user.id,
       student_number: studentNumber,
