@@ -1,10 +1,10 @@
-// Real school crest (public/logo.png), trimmed to its content with a
-// smooth (anti-aliased) transparent background — sits cleanly on both
-// light and purple surfaces without a white box or jagged edges.
+﻿import { useContent } from '../lib/ContentContext';
+
 export default function Seal({ className = 'h-10 w-10' }) {
+  const { get } = useContent();
   return (
     <img
-      src="/logo.png"
+      src={get('site.logo', '/logo.png')}
       alt="Nationwide School for Academic Excellence crest"
       className={`${className} object-contain`}
     />

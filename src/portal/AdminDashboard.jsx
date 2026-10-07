@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
+import { Link } from 'react-router-dom';
 import PortalLayout from './PortalLayout';
 
-const TABS = ['Create student login', 'Pending approvals', 'Announcements'];
+const TABS = ['Create student login', 'Pending approvals', 'Announcements', 'Website content'];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
@@ -25,8 +26,22 @@ export default function AdminDashboard() {
         {tab === 'Create student login' && <CreateStudentPanel />}
         {tab === 'Pending approvals' && <PendingApprovalsPanel />}
         {tab === 'Announcements' && <AnnouncementsPanel />}
+        {tab === 'Website content' && <WebsiteContentPanel />}
       </div>
     </PortalLayout>
+  );
+}
+
+function WebsiteContentPanel() {
+  return (
+    <div className="max-w-xl rounded-sm border border-purple-100 bg-white p-6">
+      <p className="text-sm text-ink/70">
+        Edit the text and images shown across the website \u2014 the homepage, the logo, and more.
+      </p>
+      <Link to="/portal/admin/content" className="mt-4 inline-block rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600">
+        Open content editor
+      </Link>
+    </div>
   );
 }
 
@@ -58,7 +73,7 @@ function CreateStudentPanel() {
   return (
     <div className="max-w-xl">
       <p className="text-sm text-ink/70">
-        Generates a login (not a real email address — just an ID) and a random password for a
+        Generates a login (not a real email address â€” just an ID) and a random password for a
         new student. Write both down and hand them to the student or parent; this is the only
         time the password is shown.
       </p>

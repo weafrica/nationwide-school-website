@@ -11,6 +11,7 @@ import News from './pages/News';
 import Contact from './pages/Contact';
 import PortalLogin from './pages/PortalLogin';
 import PortalGate from './portal/PortalGate';
+import AdminContent from './portal/AdminContent';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -92,8 +93,8 @@ export default function App() {
       )}
       <main className="flex-1">
         {/* key={pathname} forces every page to fully remount on each
-            navigation â€” including via the Back button or the browser's
-            own back/forward â€” so page state (scroll position, open
+            navigation Ã¢â‚¬â€ including via the Back button or the browser's
+            own back/forward Ã¢â‚¬â€ so page state (scroll position, open
             accordions, form fields) always starts fresh rather than
             carrying over stale state from a previous visit. */}
         <Routes location={location} key={location.pathname}>
@@ -105,6 +106,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/portal" element={<PortalLogin />} />
           <Route path="/portal/dashboard" element={<PortalGate />} />
+          <Route path="/portal/admin/content" element={<AdminContent />} />
         </Routes>
       </main>
       <Footer />
