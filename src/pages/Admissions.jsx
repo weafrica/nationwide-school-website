@@ -1,10 +1,6 @@
 import { useState } from 'react';
-
-const steps = [
-  { title: 'Submit an application', desc: 'Complete the form below or collect a form in person at reception.' },
-  { title: 'We review and contact you', desc: 'The admissions office confirms space in the grade and calls you within 5 working days.' },
-  { title: 'Register and pay', desc: 'Bring the learner\u2019s ID/birth certificate, report card and proof of address to finalise a place.' },
-];
+import { supabase } from '../lib/supabaseClient';
+import { useContent } from '../lib/ContentContext';
 
 const grades = [
   'Grade 0 (Grade R)', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6',
@@ -22,26 +18,48 @@ const initialForm = {
   notes: '',
 };
 
-const faqs = [
-  { q: 'Is there space in every grade for 2026?', a: 'Most grades have space, but some fill up before others. Apply as early as possible — the admissions office will confirm availability for your specific grade when they call you back.' },
-  { q: 'What are the school fees?', a: 'Fee amounts depend on the grade and are confirmed by the admissions office when you register — call 011 618 9822 or visit reception for the current fee schedule.' },
-  { q: 'Do you offer aftercare?', a: 'Yes, supervised aftercare is available after the school day ends, for an additional fee. Ask reception for details when you register.' },
-  { q: 'Can my child join partway through the year?', a: 'Yes — we accept learners at any point in the year, subject to space in that grade. Bring their most recent report card so we can place them correctly.' },
-  { q: 'What if my child has never been to school before (Grade 0)?', a: 'That\u2019s the normal starting point for Grade 0. Bring their birth certificate and immunisation record, and our Foundation Phase team will take it from there.' },
-  { q: 'Do you assist with matric subject choices?', a: 'Yes — the Senior Phase team meets with every Grade 9 learner and their parents before subject choices are finalised for Grade 10.' },
-];
-
 export default function Admissions() {
+  const { get } = useContent();
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const steps = [1, 2, 3].map((n) => ({
+    title: get(`admissions.steps.${n}.title`),
+    desc: get(`admissions.steps.${n}.desc`),
+  }));
+  const bring = [1, 2, 3, 4, 5, 6].map((n) => get(`admissions.bring.${n}`)).filter(Boolean);
+  const faqs = [1, 2, 3, 4, 5, 6].map((n) => ({
+    q: get(`admissions.faq.${n}.q`),
+    a: get(`admissions.faq.${n}.a`),
+  }));
+
+  // Saves the application so the admissions office can see it in the
+  // portal (Admin → Applications & messages).
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Front-end only for now — this form isn't wired to a database yet,
-    // so nothing is actually sent or stored. Phase 2 connects this to
-    // Supabase so applications land in the admissions office's queue.
+    setError('');
+    setSending(true);
+    const { error: insertError } = await supabase.from('admission_applications').insert({
+      learner_name: form.learnerName.trim(),
+      learner_dob: form.learnerDob,
+      grade_applying: form.gradeApplying,
+      parent_name: form.parentName.trim(),
+      parent_phone: form.parentPhone.trim(),
+      parent_email: form.parentEmail.trim() || null,
+      previous_school: form.previousSchool.trim() || null,
+      notes: form.notes.trim() || null,
+    });
+    setSending(false);
+    if (insertError) {
+      setError(
+        `We couldn't send your application just now. Please try again, or call reception on ${get('site.phone1')}.`,
+      );
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -49,22 +67,19 @@ export default function Admissions() {
     <>
       <section className="bg-purple-900 py-16 text-white lg:py-20">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="font-serif text-sm text-gold-500">Admissions</p>
+          <p className="font-serif text-sm text-gold-500">{get('admissions.hero.eyebrow')}</p>
           <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight sm:text-5xl">
-            2026 registration is open.
+            {get('admissions.hero.title')}
           </h1>
-          <p className="mt-4 max-w-lg text-white/75">
-            Reception is open 7am–3pm, Monday to Friday, at 322 Main Street, Jeppestown — or
-            apply online below.
-          </p>
+          <p className="mt-4 max-w-lg text-white/75">{get('admissions.hero.body')}</p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-16 lg:py-20">
-        <h2 className="font-serif text-3xl text-purple-900">How it works</h2>
+        <h2 className="font-serif text-3xl text-purple-900">{get('admissions.steps.heading')}</h2>
         <div className="mt-8 grid gap-8 sm:grid-cols-3">
           {steps.map((s, i) => (
-            <div key={s.title}>
+            <div key={i}>
               <p className="font-serif text-2xl text-gold-600">{i + 1}</p>
               <h3 className="mt-2 font-semibold text-purple-900">{s.title}</h3>
               <p className="mt-1 text-sm leading-relaxed text-ink/70">{s.desc}</p>
@@ -75,14 +90,11 @@ export default function Admissions() {
 
       <section className="mx-auto max-w-6xl px-6 pb-16 lg:pb-24">
         <div className="rounded-sm border border-gold-500/40 bg-lavender-50 p-8">
-          <h2 className="font-serif text-xl text-purple-900">What to bring to register in person</h2>
+          <h2 className="font-serif text-xl text-purple-900">{get('admissions.bring.heading')}</h2>
           <ul className="mt-4 grid gap-3 text-[15px] text-ink/75 sm:grid-cols-2">
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Learner's ID or birth certificate</li>
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Most recent report card (if changing schools)</li>
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Proof of address (utility bill or lease)</li>
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Parent/guardian ID</li>
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Immunisation record (Grade 0 only)</li>
-            <li className="flex gap-2"><span className="text-gold-600">&#10003;</span> Proof of guardianship, if applicable</li>
+            {bring.map((item, i) => (
+              <li key={i} className="flex gap-2"><span className="text-gold-600">&#10003;</span> {item}</li>
+            ))}
           </ul>
         </div>
       </section>
@@ -91,25 +103,25 @@ export default function Admissions() {
         <div className="mx-auto max-w-2xl px-6">
           {submitted ? (
             <div className="rounded-sm border border-purple-100 bg-white p-8 text-center">
-              <p className="font-serif text-2xl text-purple-900">Application received.</p>
+              <p className="font-serif text-2xl text-purple-900">{get('admissions.form.successTitle')}</p>
               <p className="mt-3 text-ink/70">
                 Thank you, {form.learnerName || 'and welcome'}. The admissions office will call{' '}
                 {form.parentPhone || 'you'} within 5 working days to confirm space in{' '}
                 {form.gradeApplying || 'the grade you applied for'}.
               </p>
               <p className="mt-4 text-sm text-ink/50">
-                Questions in the meantime? Call 011 618 9822 or email nationwideschools@gmail.com.
+                Questions in the meantime? Call {get('site.phone1')} or email {get('site.email')}.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="rounded-sm border border-purple-100 bg-white p-8">
-              <h2 className="font-serif text-2xl text-purple-900">Learner application</h2>
+              <h2 className="font-serif text-2xl text-purple-900">{get('admissions.form.title')}</h2>
 
               <div className="mt-6 grid gap-5">
                 <Field label="Learner's full name" required>
                   <input
-                    type="text" required value={form.learnerName} onChange={update('learnerName')}
-                    className="input"
+                    type="text" required minLength={2} maxLength={120}
+                    value={form.learnerName} onChange={update('learnerName')} className="input"
                   />
                 </Field>
 
@@ -130,21 +142,21 @@ export default function Admissions() {
 
                 <Field label="Parent / guardian full name" required>
                   <input
-                    type="text" required value={form.parentName} onChange={update('parentName')}
-                    className="input"
+                    type="text" required minLength={2} maxLength={120}
+                    value={form.parentName} onChange={update('parentName')} className="input"
                   />
                 </Field>
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Parent / guardian phone" required>
                     <input
-                      type="tel" required value={form.parentPhone} onChange={update('parentPhone')}
-                      className="input"
+                      type="tel" required minLength={7} maxLength={30}
+                      value={form.parentPhone} onChange={update('parentPhone')} className="input"
                     />
                   </Field>
                   <Field label="Parent / guardian email">
                     <input
-                      type="email" value={form.parentEmail} onChange={update('parentEmail')}
+                      type="email" maxLength={200} value={form.parentEmail} onChange={update('parentEmail')}
                       className="input"
                     />
                   </Field>
@@ -152,28 +164,29 @@ export default function Admissions() {
 
                 <Field label="Current or previous school (if any)">
                   <input
-                    type="text" value={form.previousSchool} onChange={update('previousSchool')}
+                    type="text" maxLength={200} value={form.previousSchool} onChange={update('previousSchool')}
                     className="input"
                   />
                 </Field>
 
                 <Field label="Anything else we should know">
                   <textarea
-                    rows={3} value={form.notes} onChange={update('notes')}
+                    rows={3} maxLength={2000} value={form.notes} onChange={update('notes')}
                     className="input resize-none"
                   />
                 </Field>
               </div>
 
+              {error && <p className="mt-5 text-sm text-red-700" role="alert">{error}</p>}
+
               <button
                 type="submit"
-                className="mt-7 w-full rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600"
+                disabled={sending}
+                className="mt-7 w-full rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600 disabled:opacity-60"
               >
-                Submit application
+                {sending ? 'Sending…' : 'Submit application'}
               </button>
-              <p className="mt-3 text-center text-xs text-ink/50">
-                We'll never share your details. A member of admissions will call you back.
-              </p>
+              <p className="mt-3 text-center text-xs text-ink/50">{get('admissions.form.privacy')}</p>
             </form>
           )}
         </div>
@@ -181,10 +194,10 @@ export default function Admissions() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-6 py-16 lg:py-24">
-        <h2 className="font-serif text-3xl text-purple-900">Questions parents ask</h2>
+        <h2 className="font-serif text-3xl text-purple-900">{get('admissions.faq.heading')}</h2>
         <div className="mt-8 divide-y divide-purple-100">
-          {faqs.map((f) => (
-            <FaqItem key={f.q} question={f.q} answer={f.a} />
+          {faqs.map((f, i) => (
+            <FaqItem key={i} question={f.q} answer={f.a} />
           ))}
         </div>
       </section>

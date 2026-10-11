@@ -1,17 +1,24 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
-import { Link } from 'react-router-dom';
 import PortalLayout from './PortalLayout';
+import AdminInbox from './AdminInbox';
 
-const TABS = ['Create student login', 'Pending approvals', 'Announcements', 'Website content'];
+const TABS = [
+  'Create student login',
+  'Pending approvals',
+  'Announcements',
+  'Applications & messages',
+  'Website content',
+];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
 
   return (
     <PortalLayout eyebrow="Admin portal" title="School administration">
-      <div className="flex gap-2 border-b border-purple-100">
+      <div className="flex flex-wrap gap-2 border-b border-purple-100">
         {TABS.map((t) => (
           <button
             key={t}
@@ -26,6 +33,7 @@ export default function AdminDashboard() {
         {tab === 'Create student login' && <CreateStudentPanel />}
         {tab === 'Pending approvals' && <PendingApprovalsPanel />}
         {tab === 'Announcements' && <AnnouncementsPanel />}
+        {tab === 'Applications & messages' && <AdminInbox />}
         {tab === 'Website content' && <WebsiteContentPanel />}
       </div>
     </PortalLayout>
@@ -35,11 +43,16 @@ export default function AdminDashboard() {
 function WebsiteContentPanel() {
   return (
     <div className="max-w-xl rounded-sm border border-purple-100 bg-white p-6">
-      <p className="text-sm text-ink/70">
-        Edit the text and images shown across the website \u2014 the homepage, the logo, and more.
+      <p className="font-serif text-xl text-purple-900">Edit the website</p>
+      <p className="mt-2 text-sm text-ink/70">
+        Change the wording and pictures on every page — including the school logo, contact details
+        and news posts. Changes go live as soon as you save them.
       </p>
-      <Link to="/portal/admin/content" className="mt-4 inline-block rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600">
-        Open content editor
+      <Link
+        to="/portal/admin/content"
+        className="mt-5 inline-block rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600"
+      >
+        Open the content editor
       </Link>
     </div>
   );
@@ -73,14 +86,14 @@ function CreateStudentPanel() {
   return (
     <div className="max-w-xl">
       <p className="text-sm text-ink/70">
-        Generates a login (not a real email address â€” just an ID) and a random password for a
+        Generates a login (not a real email address — just an ID) and a random password for a
         new student. Write both down and hand them to the student or parent; this is the only
         time the password is shown.
       </p>
 
       {result && (
         <div className="mt-5 rounded-sm border border-gold-500/40 bg-lavender-50 p-5">
-          <p className="font-semibold text-purple-900">Login created \u2014 write this down now:</p>
+          <p className="font-semibold text-purple-900">Login created — write this down now:</p>
           <p className="mt-2 font-mono text-sm">Username: {result.loginUsername}</p>
           <p className="font-mono text-sm">Password: {result.password}</p>
           <p className="mt-2 text-xs text-ink/60">Student number: {result.studentNumber}. They'll be asked to set their own password on first login.</p>
@@ -112,7 +125,7 @@ function CreateStudentPanel() {
         </div>
         {error && <p className="text-sm text-red-700">{error}</p>}
         <button type="submit" disabled={busy} className="rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600 disabled:opacity-60">
-          {busy ? 'Creating\u2026' : 'Create login'}
+          {busy ? 'Creating…' : 'Create login'}
         </button>
       </form>
     </div>
@@ -140,7 +153,7 @@ function PendingApprovalsPanel() {
     load();
   };
 
-  if (loading) return <p className="text-sm text-ink/50">Loading\u2026</p>;
+  if (loading) return <p className="text-sm text-ink/50">Loading…</p>;
   if (pending.length === 0) return <p className="text-sm text-ink/60">No accounts waiting for approval.</p>;
 
   return (
@@ -206,7 +219,7 @@ function AnnouncementsPanel() {
         </select>
       </label>
       <button type="submit" disabled={busy} className="rounded-sm bg-gold-500 px-6 py-3 font-semibold text-purple-900 hover:bg-gold-600 disabled:opacity-60">
-        {busy ? 'Posting\u2026' : posted ? 'Posted!' : 'Post announcement'}
+        {busy ? 'Posting…' : posted ? 'Posted!' : 'Post announcement'}
       </button>
     </form>
   );

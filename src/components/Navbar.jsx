@@ -1,7 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Seal from './Seal';
 import ThemeToggle from './ThemeToggle';
+import { useContent } from '../lib/ContentContext';
 
 const links = [
   { to: '/about', label: 'About' },
@@ -13,6 +14,7 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { get } = useContent();
 
   return (
     <header className="sticky top-0 z-50 border-b border-purple-100 bg-paper/95 backdrop-blur">
@@ -20,9 +22,9 @@ export default function Navbar() {
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <Seal className="h-12 w-auto shrink-0" />
           <span className="font-serif text-lg leading-tight text-purple-900">
-            Nationwide School
+            {get('site.name')}
             <span className="block text-[11px] font-sans font-medium tracking-wide text-gold-600">
-              for Academic Excellence
+              {get('site.tagline')}
             </span>
           </span>
         </Link>
