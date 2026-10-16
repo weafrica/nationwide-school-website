@@ -37,8 +37,8 @@ export default function Home() {
               {get('home.hero.body')}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button to="/admissions">Apply for 2026</Button>
-              <Button to="/contact" variant="outline">Book a tour</Button>
+              <Button to="/admissions">{get('home.hero.button1')}</Button>
+              <Button to="/contact" variant="outline">{get('home.hero.button2')}</Button>
             </div>
           </div>
 
@@ -84,7 +84,7 @@ export default function Home() {
             <p>{get('home.about.body1')}</p>
             <p>{get('home.about.body2')}</p>
             <Link to="/about" className="inline-block font-semibold text-purple-600 hover:text-purple-900">
-              More about our school &rarr;
+              {get('home.about.link')} &rarr;
             </Link>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function Home() {
             ))}
           </div>
           <Link to="/academics" className="mt-8 inline-block font-semibold text-purple-600 hover:text-purple-900">
-            See the full academic programme &rarr;
+            {get('home.phases.link')} &rarr;
           </Link>
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function Home() {
           ))}
         </div>
         <Link to="/academics" className="mt-8 inline-block font-semibold text-purple-600 hover:text-purple-900">
-          More about student life &rarr;
+          {get('home.life.link')} &rarr;
         </Link>
       </section>
 
@@ -144,7 +144,7 @@ export default function Home() {
             <p className="mt-1 text-white/70">{get('home.cta.body')}</p>
           </div>
           <Button to="/admissions" variant="primary" className="shrink-0">
-            Start an application
+            {get('home.cta.button')}
           </Button>
         </div>
       </section>

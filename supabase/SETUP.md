@@ -22,15 +22,30 @@ by name) and run them one at a time, in a fresh query each time:
    application and contact-message tables your public pages submit to.
 5. `20260928100400_automation_and_admin_helpers.sql` — auto-enrolling a
    new student into their grade's subjects, and two admin helper
-   functions (`admin_assign_teacher`, `admin_link_parent`) you'll use
-   from the SQL editor later.
+   functions (`admin_assign_teacher`, `admin_link_parent`). The portal's
+   **Teachers & parents** screen calls these for you.
 6. `20260928100500_seed_subjects.sql` — the standard subject list for
    every grade, matching the Academics page.
+7. `20261011000000_site_content_and_news.sql` — the editable website
+   text and pictures (`site_content`), the public `site-images` picture
+   bucket, and news posts (with the six posts the site launched with).
+   This is what the **Website content** editor writes to.
+8. `20261012000000_form_throttle.sql` — refuses new admission
+   applications or contact messages when more than 30 arrive within ten
+   minutes, so the forms can't be flooded.
 
-This whole set has been tested against a real Postgres database (47
-checks: every role, every table, every write restriction) before being
-handed to you. Safe to run once on a fresh project; don't run any of
-them a second time.
+Files 1-6 were tested against a real Postgres database (47 checks:
+every role, every table, every write restriction). Files 7-8 and the
+live school project were tested the same way, role by role (visitor,
+learner, parent, teacher, principal, admin). Safe to run once on a
+fresh project; don't run any of them a second time.
+
+> **The school's live database** was first created from an earlier,
+> looser single-file schema. It has since been brought fully in line with
+> the migrations above by `supabase/catch-up/20261012_align_live_database_with_migrations.sql`.
+> That file is a record of a one-off change that has **already been
+> applied** — do **not** run it on a fresh project (a fresh project gets
+> all of it from files 1-8).
 
 ## 2. Turn on Google sign-in (optional, can be added later)
 
@@ -89,17 +104,13 @@ of `functions/create-student/index.ts`.
    for future staff (you can approve them from inside the portal itself
    from here on).
 
-Two more admin helpers you'll use from the SQL Editor as the school's
-real data comes in (not from the portal UI, which doesn't have screens
-for these yet):
+Once teachers and parents have signed in and been approved, use the
+admin dashboard's **Teachers & parents** tab to say which teacher
+teaches which subject and which parent belongs to which learner. (The
+same thing can be done from the SQL Editor if you prefer:)
 
 ```sql
--- after a teacher has signed in once and you've approved their role:
 select admin_assign_teacher('teacher@example.com', 'Mathematics', 'Grade 4');
-
--- after a parent has signed in once and you've approved their role,
--- and the student already has a login (see the portal's "Create
--- student login" tool):
 select admin_link_parent('parent@example.com', '20261234');
 ```
 
@@ -112,3 +123,32 @@ Vercel → your project → Settings → Environment Variables, add:
 
 Redeploy after adding these (Vercel → Deployments → \[latest\] → ⋯ →
 Redeploy) so the live site picks them up.
+
+## 6. Keep the free Supabase project awake
+
+The free Supabase plan **pauses a project that has been idle for a
+week**, which takes the news page, the forms and the portal offline
+until someone restores it. `vercel.json` schedules a small daily
+request (`/api/keepalive`, see `api/keepalive.js`) that keeps it awake.
+It reads one public row, using the same two environment variables as
+step 5.
+
+To check it is running: Vercel → your project → Settings → Cron Jobs.
+If the project ever does pause, Supabase dashboard → open the project →
+**Restore project**. (Upgrading to a paid Supabase plan removes the
+pausing altogether.)
+
+## 7. Editing the website, news and the inbox
+
+Sign in as an admin → **Website content** tab → **Open the content
+editor**. Every page's wording, the contact details, the school logo
+and optional photos can be changed there, and news posts can be added,
+edited, hidden or deleted. Changes go live immediately, and the original
+wording can always be restored.
+
+Everything people send through the public forms appears under **Applications &
+messages**, with a number on the tab showing how many are new.
+
+To make a new piece of text editable, add one line to
+`src/lib/contentFields.js` and read it in the page with
+`get('your.key')` — the editor picks it up automatically.

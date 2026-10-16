@@ -40,6 +40,19 @@ export const contentFields = [
   text('site.facebook', 'Site-wide', 'Footer', 'Facebook page link', 'https://facebook.com'),
   text('site.instagram', 'Site-wide', 'Footer', 'Instagram page link', 'https://instagram.com'),
   text('site.footerNote', 'Site-wide', 'Footer', 'Line at the bottom right of the footer', 'Primary and High School · Grade 0–12'),
+  text('footer.visit', 'Site-wide', 'Footer', 'Footer heading — address', 'Visit us'),
+  text('footer.touch', 'Site-wide', 'Footer', 'Footer heading — phone and email', 'Get in touch'),
+  text('footer.links', 'Site-wide', 'Footer', 'Footer heading — links', 'Quick links'),
+  text('footer.link.apply', 'Site-wide', 'Footer', 'Footer link 1', 'Apply for 2026'),
+  text('footer.link.academics', 'Site-wide', 'Footer', 'Footer link 2', 'Academic programme'),
+  text('footer.link.portal', 'Site-wide', 'Footer', 'Footer link 3', 'Student & staff portal'),
+
+  text('nav.about', 'Site-wide', 'Menu names', 'Menu — About', 'About'),
+  text('nav.academics', 'Site-wide', 'Menu names', 'Menu — Academics', 'Academics'),
+  text('nav.admissions', 'Site-wide', 'Menu names', 'Menu — Admissions', 'Admissions'),
+  text('nav.news', 'Site-wide', 'Menu names', 'Menu — News', 'News'),
+  text('nav.contact', 'Site-wide', 'Menu names', 'Menu — Contact', 'Contact'),
+  text('nav.portal', 'Site-wide', 'Menu names', 'Menu — portal button', 'Portal login'),
 
   // ───────────────────────── Home ─────────────────────────
   text('home.hero.eyebrow', 'Home', 'Hero banner', 'Small label above the headline', '2026 admission is open'),
@@ -47,6 +60,8 @@ export const contentFields = [
   text('home.hero.body', 'Home', 'Hero banner', 'Paragraph under the headline', 'Nationwide School for Academic Excellence is a Grade 0–12 school in Jeppestown with five consecutive years of a 100% matric pass rate — and registration for 2026 is open now.'),
   text('home.hero.badge', 'Home', 'Hero banner', 'Badge text on the picture', 'Seed of Excellence'),
   image('home.hero.image', 'Home', 'Hero banner', 'Hero photo (optional — replaces the purple and gold stripes)'),
+  text('home.hero.button1', 'Home', 'Hero banner', 'First button', 'Apply for 2026'),
+  text('home.hero.button2', 'Home', 'Hero banner', 'Second button', 'Book a tour'),
 
   ...group('home.stats', 'Home', 'Stats row', 'Stat', [
     { value: '100%', label: 'Matric pass rate, five years running' },
@@ -57,11 +72,13 @@ export const contentFields = [
   text('home.about.heading', 'Home', 'About teaser', 'Heading', 'A school built to be finished, not just attended'),
   text('home.about.body1', 'Home', 'About teaser', 'First paragraph', 'We take one intake through thirteen years — Grade 0 to Grade 12 — so a child’s record, relationships and routines never have to restart at a new gate. Class teachers know what a learner struggled with in Grade 3 by the time that learner sits their first matric paper.'),
   text('home.about.body2', 'Home', 'About teaser', 'Second paragraph', 'That continuity is where the pass rate comes from: not a single strong matric class, but thirteen years of the same standard applied consistently.'),
+  text('home.about.link', 'Home', 'About teaser', 'Link text (an arrow is added automatically)', 'More about our school'),
 
   text('home.principal.eyebrow', 'Home', 'Principal’s note', 'Small label', 'A note from the Principal'),
   text('home.principal.quote', 'Home', 'Principal’s note', 'Quote', 'We don’t ask what a child arrives knowing. We ask what they’ll leave knowing how to do — and we hold that standard from Grade 0 all the way to their last matric exam.'),
 
   text('home.phases.heading', 'Home', 'Academic phases', 'Section heading', 'Four phases, one standard'),
+  text('home.phases.link', 'Home', 'Academic phases', 'Link text under the cards (an arrow is added automatically)', 'See the full academic programme'),
   ...group('home.phases', 'Home', 'Academic phases', 'Phase', [
     { title: 'Foundation', grades: 'Grade 0 – 3', desc: 'Literacy, numeracy and the routines that make school feel safe.' },
     { title: 'Intermediate', grades: 'Grade 4 – 6', desc: 'Broader subjects, first real projects, first real responsibility.' },
@@ -71,6 +88,7 @@ export const contentFields = [
 
   text('home.life.heading', 'Home', 'Life at Nationwide', 'Section heading', 'Life at Nationwide'),
   text('home.life.subtext', 'Home', 'Life at Nationwide', 'Text under the heading', 'Matric results are the headline. This is what fills the years that lead up to it.'),
+  text('home.life.link', 'Home', 'Life at Nationwide', 'Link text under the cards (an arrow is added automatically)', 'More about student life'),
   ...group('home.life', 'Home', 'Life at Nationwide', 'Card', [
     { title: 'Sport', desc: 'Soccer, netball, athletics and inter-house days.' },
     { title: 'Clubs', desc: 'Debate, chess, coding and student council.' },
@@ -80,6 +98,7 @@ export const contentFields = [
 
   text('home.cta.heading', 'Home', 'Admissions banner', 'Heading', 'Registration for 2026 is in progress.'),
   text('home.cta.body', 'Home', 'Admissions banner', 'Text under the heading', 'Reception is open 7am–3pm, Monday to Friday, at 322 Main Street, Jeppestown.'),
+  text('home.cta.button', 'Home', 'Admissions banner', 'Button text', 'Start an application'),
 
   // ───────────────────────── About ─────────────────────────
   text('about.hero.eyebrow', 'About', 'Page banner', 'Small label', 'About us'),
@@ -206,6 +225,14 @@ export const contentFields = [
   // ───────────────────────── News ─────────────────────────
   text('news.hero.eyebrow', 'News', 'Page banner', 'Small label', 'News'),
   text('news.hero.title', 'News', 'Page banner', 'Main headline', 'What\'s happening at Nationwide.'),
+
+  // ───────────────────────── Portal login ─────────────────────────
+  text('portal.title', 'Portal login', 'Sign-in page', 'Heading', 'Student & staff portal'),
+  text('portal.subtitle', 'Portal login', 'Sign-in page', 'Text under the heading', 'Grades, courses and announcements.'),
+  text('portal.googleNote', 'Portal login', 'Sign-in page', 'Note under the Google button', 'New Google sign-ins wait for admin approval before they can see anything.'),
+  text('portal.studentNote', 'Portal login', 'Sign-in page', 'Note at the bottom', 'Students: use the login and password given to you by the school office.'),
+  text('portal.pending.title', 'Portal login', 'Waiting-for-approval screen', 'Heading', 'Waiting for approval'),
+  text('portal.pending.text', 'Portal login', 'Waiting-for-approval screen', 'Message (the reception phone number is added automatically)', 'Your account is signed in, but the school office hasn\'t assigned you a role yet (student, teacher, or parent). This usually happens within a school day.'),
 ];
 
 // key → original wording, used by the site until something is edited.
@@ -220,4 +247,5 @@ export const pageRoutes = {
   Admissions: '/admissions',
   Contact: '/contact',
   News: '/news',
+  'Portal login': '/portal',
 };

@@ -4,6 +4,7 @@ import ChangePassword from './ChangePassword';
 import PendingApproval from './PendingApproval';
 import StudentDashboard from './StudentDashboard';
 import TeacherDashboard from './TeacherDashboard';
+import ParentDashboard from './ParentDashboard';
 import AdminDashboard from './AdminDashboard';
 
 // Auto-refresh in the sense that matters for a portal: this component
@@ -15,7 +16,7 @@ export default function PortalGate() {
   const { session, profile, loading, signOut } = useAuth();
 
   if (loading) {
-    return <div className="flex min-h-[50vh] items-center justify-center text-ink/50">Loading\u2026</div>;
+    return <div className="flex min-h-[50vh] items-center justify-center text-ink/50">Loading…</div>;
   }
 
   if (!session) {
@@ -23,7 +24,7 @@ export default function PortalGate() {
   }
 
   if (!profile) {
-    return <div className="flex min-h-[50vh] items-center justify-center text-ink/50">Setting up your account\u2026</div>;
+    return <div className="flex min-h-[50vh] items-center justify-center text-ink/50">Setting up your account…</div>;
   }
 
   if (profile.must_change_password) {
@@ -36,6 +37,7 @@ export default function PortalGate() {
 
   if (profile.role === 'student') return <StudentDashboard />;
   if (profile.role === 'teacher') return <TeacherDashboard />;
+  if (profile.role === 'parent') return <ParentDashboard />;
   if (profile.role === 'principal' || profile.role === 'admin') return <AdminDashboard />;
 
   return <PendingApproval onSignOut={signOut} />;

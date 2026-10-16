@@ -38,7 +38,7 @@ export default function StudentDashboard() {
     return () => clearInterval(interval);
   }, [load]);
 
-  if (loading) return <PortalLayout eyebrow="Portal" title="Your dashboard"><p className="text-ink/50">Loading\u2026</p></PortalLayout>;
+  if (loading) return <PortalLayout eyebrow="Portal" title="Your dashboard"><p className="text-ink/50">Loading…</p></PortalLayout>;
 
   return (
     <PortalLayout eyebrow="Student portal" title="Your dashboard">

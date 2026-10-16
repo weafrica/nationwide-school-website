@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-serif text-sm text-gold-500">Visit us</h3>
+            <h3 className="font-serif text-sm text-gold-500">{get('footer.visit')}</h3>
             <p className="mt-3 text-sm text-white/75">
               {addressLines.map((line, i) => (
                 <span key={i}>
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-serif text-sm text-gold-500">Get in touch</h3>
+            <h3 className="font-serif text-sm text-gold-500">{get('footer.touch')}</h3>
             <p className="mt-3 text-sm text-white/75">
               {phones.map((phone, i) => (
                 <span key={phone}>
@@ -56,11 +56,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-serif text-sm text-gold-500">Quick links</h3>
+            <h3 className="font-serif text-sm text-gold-500">{get('footer.links')}</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/75">
-              <li><Link to="/admissions" className="hover:text-white">Apply for 2026</Link></li>
-              <li><Link to="/academics" className="hover:text-white">Academic programme</Link></li>
-              <li><Link to="/portal" className="hover:text-white">Student &amp; staff portal</Link></li>
+              <li><Link to="/admissions" className="hover:text-white">{get('footer.link.apply')}</Link></li>
+              <li><Link to="/academics" className="hover:text-white">{get('footer.link.academics')}</Link></li>
+              <li><Link to="/portal" className="hover:text-white">{get('footer.link.portal')}</Link></li>
               <li>
                 <a href={get('site.facebook')} className="hover:text-white">Facebook</a>
                 {' · '}

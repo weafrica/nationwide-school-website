@@ -5,11 +5,11 @@ import ThemeToggle from './ThemeToggle';
 import { useContent } from '../lib/ContentContext';
 
 const links = [
-  { to: '/about', label: 'About' },
-  { to: '/academics', label: 'Academics' },
-  { to: '/admissions', label: 'Admissions' },
-  { to: '/news', label: 'News' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/about', key: 'nav.about' },
+  { to: '/academics', key: 'nav.academics' },
+  { to: '/admissions', key: 'nav.admissions' },
+  { to: '/news', key: 'nav.news' },
+  { to: '/contact', key: 'nav.contact' },
 ];
 
 export default function Navbar() {
@@ -40,7 +40,7 @@ export default function Navbar() {
                 }`
               }
             >
-              {l.label}
+              {get(l.key)}
             </NavLink>
           ))}
           <ThemeToggle />
@@ -48,7 +48,7 @@ export default function Navbar() {
             to="/portal"
             className="rounded-sm bg-purple-900 px-5 py-2.5 text-[15px] font-semibold text-white hover:bg-purple-700"
           >
-            Portal login
+            {get('nav.portal')}
           </Link>
         </nav>
 
@@ -82,7 +82,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className="rounded-sm px-2 py-2.5 text-[15px] font-medium text-ink/80 hover:bg-lavender-50"
             >
-              {l.label}
+              {get(l.key)}
             </NavLink>
           ))}
           <Link
@@ -90,7 +90,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-2 rounded-sm bg-purple-900 px-2 py-2.5 text-center text-[15px] font-semibold text-white"
           >
-            Portal login
+            {get('nav.portal')}
           </Link>
         </nav>
       )}

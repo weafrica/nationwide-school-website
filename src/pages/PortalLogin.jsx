@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Seal from '../components/Seal';
 import { useAuth } from '../lib/AuthContext';
+import { useContent } from '../lib/ContentContext';
 import { isSupabaseConfigured } from '../lib/supabaseClient';
 
 export default function PortalLogin() {
   const { signInWithGoogle, signInWithPassword } = useAuth();
+  const { get } = useContent();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,7 +37,7 @@ export default function PortalLogin() {
           <h1 className="mt-4 font-serif text-2xl text-purple-900">Portal coming soon</h1>
           <p className="mt-2 text-sm leading-relaxed text-ink/70">
             The student and staff portal is being set up. Check back soon, or contact the
-            school office at 011 618 9822 in the meantime.
+            school office at {get('site.phone1')} in the meantime.
           </p>
         </div>
       </section>
@@ -47,8 +49,8 @@ export default function PortalLogin() {
       <div className="w-full max-w-sm rounded-sm border border-purple-100 bg-white p-8">
         <div className="flex flex-col items-center text-center">
           <Seal className="h-14 w-auto" />
-          <h1 className="mt-4 font-serif text-2xl text-purple-900">Student &amp; staff portal</h1>
-          <p className="mt-1 text-sm text-ink/60">Grades, courses and announcements.</p>
+          <h1 className="mt-4 font-serif text-2xl text-purple-900">{get('portal.title')}</h1>
+          <p className="mt-1 text-sm text-ink/60">{get('portal.subtitle')}</p>
         </div>
 
         <button
@@ -60,9 +62,7 @@ export default function PortalLogin() {
           Continue with Google
         </button>
 
-        <p className="mt-3 text-center text-xs text-ink/50">
-          New Google sign-ins wait for admin approval before they can see anything.
-        </p>
+        <p className="mt-3 text-center text-xs text-ink/50">{get('portal.googleNote')}</p>
 
         <div className="my-6 flex items-center gap-3 text-xs text-ink/40">
           <div className="h-px flex-1 bg-purple-100" />
@@ -92,13 +92,11 @@ export default function PortalLogin() {
             type="submit" disabled={busy}
             className="w-full rounded-sm bg-purple-900 px-6 py-3 font-semibold text-white hover:bg-purple-700 disabled:opacity-60"
           >
-            {busy ? 'Signing in\u2026' : 'Log in'}
+            {busy ? 'Signing in…' : 'Log in'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-ink/50">
-          Students: use the login and password given to you by the school office.
-        </p>
+        <p className="mt-6 text-center text-xs text-ink/50">{get('portal.studentNote')}</p>
       </div>
     </section>
   );

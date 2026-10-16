@@ -50,7 +50,7 @@ export default function TeacherDashboard() {
     if (!error) { setSavedFor(studentId); setTimeout(() => setSavedFor(null), 2000); }
   };
 
-  if (loading) return <PortalLayout eyebrow="Portal" title="Your classes"><p className="text-ink/50">Loading\u2026</p></PortalLayout>;
+  if (loading) return <PortalLayout eyebrow="Portal" title="Your classes"><p className="text-ink/50">Loading…</p></PortalLayout>;
 
   return (
     <PortalLayout eyebrow="Teacher portal" title="Your classes">

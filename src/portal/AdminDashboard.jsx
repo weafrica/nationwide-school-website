@@ -4,17 +4,50 @@ import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
 import PortalLayout from './PortalLayout';
 import AdminInbox from './AdminInbox';
+import AdminLinks from './AdminLinks';
 
 const TABS = [
   'Create student login',
   'Pending approvals',
+  'Teachers & parents',
   'Announcements',
   'Applications & messages',
   'Website content',
 ];
 
+// Numbers shown on the tabs so nothing waiting for the office goes unnoticed.
+function useWaitingCounts() {
+  const [counts, setCounts] = useState({ pending: 0, inbox: 0 });
+
+  useEffect(() => {
+    let cancelled = false;
+    const count = (table, column, value) =>
+      supabase.from(table).select('id', { count: 'exact', head: true }).eq(column, value);
+    const load = async () => {
+      const [pending, applications, messages] = await Promise.all([
+        count('profiles', 'role', 'pending'),
+        count('admission_applications', 'status', 'new'),
+        count('contact_messages', 'status', 'new'),
+      ]);
+      if (!cancelled) {
+        setCounts({
+          pending: pending.count || 0,
+          inbox: (applications.count || 0) + (messages.count || 0),
+        });
+      }
+    };
+    load();
+    const timer = setInterval(load, 30000);
+    return () => { cancelled = true; clearInterval(timer); };
+  }, []);
+
+  return counts;
+}
+
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
+  const counts = useWaitingCounts();
+  const waiting = { 'Pending approvals': counts.pending, 'Applications & messages': counts.inbox };
 
   return (
     <PortalLayout eyebrow="Admin portal" title="School administration">
@@ -26,12 +59,16 @@ export default function AdminDashboard() {
             className={`px-4 py-2.5 text-sm font-semibold ${tab === t ? 'border-b-2 border-gold-500 text-purple-900' : 'text-ink/50 hover:text-purple-900'}`}
           >
             {t}
+            {waiting[t] > 0 && (
+              <span className="ml-2 rounded-full bg-gold-500 px-2 py-0.5 text-xs text-purple-900">{waiting[t]}</span>
+            )}
           </button>
         ))}
       </div>
       <div className="mt-8">
         {tab === 'Create student login' && <CreateStudentPanel />}
         {tab === 'Pending approvals' && <PendingApprovalsPanel />}
+        {tab === 'Teachers & parents' && <AdminLinks />}
         {tab === 'Announcements' && <AnnouncementsPanel />}
         {tab === 'Applications & messages' && <AdminInbox />}
         {tab === 'Website content' && <WebsiteContentPanel />}

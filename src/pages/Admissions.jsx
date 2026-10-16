@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useContent } from '../lib/ContentContext';
 
@@ -6,6 +6,9 @@ const grades = [
   'Grade 0 (Grade R)', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6',
   'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12',
 ];
+
+// Hidden field only bots fill in. People never see it.
+const trapStyle = { position: 'absolute', left: '-10000px', top: 'auto', width: 1, height: 1, overflow: 'hidden' };
 
 const initialForm = {
   learnerName: '',
@@ -24,6 +27,8 @@ export default function Admissions() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [trap, setTrap] = useState('');
+  const openedAt = useRef(Date.now());
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -42,6 +47,11 @@ export default function Admissions() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (trap) { setSubmitted(true); return; } // a bot: pretend it worked, send nothing
+    if (Date.now() - openedAt.current < 1500) {
+      setError('Please check your details and press Submit once more.');
+      return;
+    }
     setSending(true);
     const { error: insertError } = await supabase.from('admission_applications').insert({
       learner_name: form.learnerName.trim(),
@@ -116,6 +126,11 @@ export default function Admissions() {
           ) : (
             <form onSubmit={handleSubmit} className="rounded-sm border border-purple-100 bg-white p-8">
               <h2 className="font-serif text-2xl text-purple-900">{get('admissions.form.title')}</h2>
+              <div aria-hidden="true" style={trapStyle}>
+                <label>Leave this empty
+                  <input type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+                </label>
+              </div>
 
               <div className="mt-6 grid gap-5">
                 <Field label="Learner's full name" required>

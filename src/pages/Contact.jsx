@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useContent } from '../lib/ContentContext';
+
+// Hidden field only bots fill in. People never see it.
+const trapStyle = { position: 'absolute', left: '-10000px', top: 'auto', width: 1, height: 1, overflow: 'hidden' };
 
 export default function Contact() {
   const { get } = useContent();
@@ -8,6 +11,8 @@ export default function Contact() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [trap, setTrap] = useState('');
+  const openedAt = useRef(Date.now());
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -21,6 +26,11 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (trap) { setSent(true); return; } // a bot: pretend it worked, send nothing
+    if (Date.now() - openedAt.current < 1500) {
+      setError('Please check your message and press Send once more.');
+      return;
+    }
     setSending(true);
     const { error: insertError } = await supabase.from('contact_messages').insert({
       name: form.name.trim(),
@@ -97,6 +107,11 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="rounded-sm border border-purple-100 bg-white p-8">
                 <h2 className="font-serif text-2xl text-purple-900">{get('contact.form.title')}</h2>
+                <div aria-hidden="true" style={trapStyle}>
+                  <label>Leave this empty
+                    <input type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+                  </label>
+                </div>
                 <div className="mt-5 space-y-4">
                   <label className="block">
                     <span className="text-sm font-medium text-ink/80">Your name</span>
