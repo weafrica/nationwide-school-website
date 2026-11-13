@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Seal from './Seal';
+import InstallApp from './InstallApp';
 import { useContent } from '../lib/ContentContext';
 
 // "011 618 9822" -> "tel:+27116189822"
@@ -61,6 +62,7 @@ export default function Footer() {
               <li><Link to="/admissions" className="hover:text-white">{get('footer.link.apply')}</Link></li>
               <li><Link to="/academics" className="hover:text-white">{get('footer.link.academics')}</Link></li>
               <li><Link to="/portal" className="hover:text-white">{get('footer.link.portal')}</Link></li>
+              <li><InstallApp /></li>
               <li>
                 <a href={get('site.facebook')} className="hover:text-white">Facebook</a>
                 {' · '}

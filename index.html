@@ -5,7 +5,19 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nationwide School for Academic Excellence</title>
-    <meta name="description" content="Nationwide School for Academic Excellence â€” Primary and High School, Grade 0â€“12, in Jeppestown. 2026 registration is open." />
+    <meta name="description" content="Nationwide School for Academic Excellence — Primary and High School, Grade 0–12, in Jeppestown. 2026 registration is open." />
+
+    <!-- Installable app (PWA): Android, Chrome and Edge use the manifest; iPhone
+         and iPad ignore it and use the apple-* tags below. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2E1359" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Nationwide" />
+    <meta name="application-name" content="Nationwide School" />
+
     <script>
       (function () {
         try {
@@ -13,9 +25,72 @@
           if (theme === 'dark') document.documentElement.classList.add('dark');
         } catch (e) {}
       })();
+
+      // Safety net for the launch splash further down: once the page has finished
+      // loading, give the app three seconds to take over. If the splash is still
+      // there then, the app failed to start, so uncover the page instead of
+      // leaving people stuck on a purple screen.
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          var splash = document.getElementById('splash');
+          if (splash) splash.classList.add('splash-hidden');
+        }, 3000);
+      });
+
+      // Chrome announces "this site can be installed" once, often before the
+      // page's own code has loaded. Catch it here so the footer's "Install the
+      // app" link can use it whenever it appears.
+      window.addEventListener('beforeinstallprompt', function (event) {
+        event.preventDefault();
+        window.__installPrompt = event;
+        window.dispatchEvent(new Event('install-prompt-ready'));
+      });
     </script>
+
+    <!-- Launch splash. Shown ONLY when the site is opened as the installed app
+         (so ordinary visitors never see it), covering the blank flash while the
+         app loads. main.jsx fades it out once the page has painted. It stays up
+         for as long as the app is genuinely still loading (slow mobile data
+         included). If the page finishes loading and the app is STILL not there,
+         the script above hides the splash three seconds later; and if even that
+         script cannot run, the animation below hides it after 15 seconds. Either
+         way it can never trap someone on a purple screen. -->
+    <style>
+      #splash {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        background: #2e1359;
+        transition: opacity 0.4s ease;
+        animation: splash-failsafe 0.4s ease 15s forwards;
+      }
+      #splash img { width: min(46vw, 180px); height: auto; }
+      #splash p {
+        margin: 0;
+        padding: 0 24px;
+        text-align: center;
+        color: #e3b341;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 1.1rem;
+        line-height: 1.35;
+      }
+      #splash p span { display: block; font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+      @media (display-mode: standalone) { #splash { display: flex; } }
+      #splash.splash-hidden { opacity: 0; pointer-events: none; }
+      @keyframes splash-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    </style>
+    <link rel="preload" as="image" href="/logo.png" />
   </head>
   <body>
+    <div id="splash" aria-hidden="true">
+      <img src="/logo.png" alt="" />
+      <p>Nationwide School<span>for Academic Excellence</span></p>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

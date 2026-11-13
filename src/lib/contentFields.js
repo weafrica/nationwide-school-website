@@ -46,6 +46,8 @@ export const contentFields = [
   text('footer.link.apply', 'Site-wide', 'Footer', 'Footer link 1', 'Apply for 2026'),
   text('footer.link.academics', 'Site-wide', 'Footer', 'Footer link 2', 'Academic programme'),
   text('footer.link.portal', 'Site-wide', 'Footer', 'Footer link 3', 'Student & staff portal'),
+  text('footer.link.install', 'Site-wide', 'Footer', 'Footer link 4 — install the app (only shown where installing is possible)', 'Install the app'),
+  text('footer.install.help', 'Site-wide', 'Footer', 'Install instructions shown to iPhone and iPad visitors', 'To install: tap the Share button, then “Add to Home Screen”.'),
 
   text('nav.about', 'Site-wide', 'Menu names', 'Menu — About', 'About'),
   text('nav.academics', 'Site-wide', 'Menu names', 'Menu — Academics', 'Academics'),

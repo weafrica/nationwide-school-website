@@ -1,0 +1,23 @@
+{
+  "id": "/",
+  "name": "Nationwide School for Academic Excellence",
+  "short_name": "Nationwide",
+  "description": "Nationwide School for Academic Excellence, Jeppestown. Primary and High School, Grade 0 to 12. News, admissions, and the student, teacher and parent portal.",
+  "lang": "en-ZA",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#2E1359",
+  "theme_color": "#2E1359",
+  "categories": ["education"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Portal login", "short_name": "Portal", "url": "/portal?source=shortcut" },
+    { "name": "Apply for 2026", "short_name": "Apply", "url": "/admissions?source=shortcut" },
+    { "name": "School news", "short_name": "News", "url": "/news?source=shortcut" }
+  ]
+}
