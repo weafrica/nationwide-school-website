@@ -11,6 +11,7 @@ export default function TeacherDashboard() {
   const [loading, setLoading] = useState(true);
   const [savingFor, setSavingFor] = useState(null);
   const [savedFor, setSavedFor] = useState(null);
+  const [saveError, setSaveError] = useState('');
 
   const loadSubjects = useCallback(async () => {
     const { data } = await supabase
@@ -41,13 +42,33 @@ export default function TeacherDashboard() {
   }, [loadRoster]);
 
   const saveMark = async (studentId, term, year, score, comment) => {
+    setSaveError('');
+    const trimmedScore = String(score).trim();
+    if (score !== '' && (trimmedScore === '' || Number.isNaN(Number(trimmedScore)) || Number(trimmedScore) < 0 || Number(trimmedScore) > 100)) {
+      setSaveError('A mark must be a number from 0 to 100 (or left empty).');
+      return;
+    }
+    const yearNumber = Number(year);
+    if (!Number.isInteger(yearNumber) || yearNumber < 2000 || yearNumber > 2100) {
+      setSaveError('Please type the year as four digits, for example 2026.');
+      return;
+    }
+    if (comment.length > 1000) {
+      setSaveError('A comment can be at most 1000 characters.');
+      return;
+    }
     setSavingFor(studentId);
     const { error } = await supabase.from('marks').upsert(
       { student_id: studentId, subject_id: selectedSubject, term: Number(term), year: Number(year), score: score === '' ? null : Number(score), comment, recorded_by: user.id },
       { onConflict: 'student_id,subject_id,term,year' }
     );
     setSavingFor(null);
-    if (!error) { setSavedFor(studentId); setTimeout(() => setSavedFor(null), 2000); }
+    if (error) {
+      setSaveError('That mark could not be saved. Please check your connection and that this learner is in your class, then try again.');
+    } else {
+      setSavedFor(studentId);
+      setTimeout(() => setSavedFor(null), 2000);
+    }
   };
 
   if (loading) return <PortalLayout eyebrow="Portal" title="Your classes"><p className="text-ink/50">Loading…</p></PortalLayout>;
@@ -65,6 +86,7 @@ export default function TeacherDashboard() {
             </select>
           </label>
 
+          {saveError && <p role="alert" className="mt-6 rounded-sm border border-red-300 px-4 py-3 text-sm text-red-700">{saveError}</p>}
           <div className="mt-6 overflow-hidden rounded-sm border border-purple-100">
             <table className="w-full text-sm">
               <thead className="bg-lavender-50 text-left text-xs uppercase tracking-wide text-ink/60">

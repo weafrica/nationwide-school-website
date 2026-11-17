@@ -5,6 +5,8 @@ import { useAuth } from '../lib/AuthContext';
 import PortalLayout from './PortalLayout';
 import AdminInbox from './AdminInbox';
 import AdminLinks from './AdminLinks';
+import AdminAnnouncements from './AdminAnnouncements';
+import InboxExport from './InboxExport';
 
 const TABS = [
   'Create student login',
@@ -69,8 +71,13 @@ export default function AdminDashboard() {
         {tab === 'Create student login' && <CreateStudentPanel />}
         {tab === 'Pending approvals' && <PendingApprovalsPanel />}
         {tab === 'Teachers & parents' && <AdminLinks />}
-        {tab === 'Announcements' && <AnnouncementsPanel />}
-        {tab === 'Applications & messages' && <AdminInbox />}
+        {tab === 'Announcements' && <AdminAnnouncements />}
+        {tab === 'Applications & messages' && (
+          <>
+            <InboxExport />
+            <AdminInbox />
+          </>
+        )}
         {tab === 'Website content' && <WebsiteContentPanel />}
       </div>
     </PortalLayout>

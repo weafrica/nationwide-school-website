@@ -31,9 +31,8 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     load();
-    // Auto-refresh every 30s, same pattern as the eFootball lobby
-    // banners — a new mark or announcement shows up without a manual
-    // page reload.
+    // Auto-refresh every 30 seconds so a new mark or announcement shows up
+    // without a manual page reload.
     const interval = setInterval(load, 30000);
     return () => clearInterval(interval);
   }, [load]);
