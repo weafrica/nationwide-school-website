@@ -7,9 +7,11 @@ import AdminInbox from './AdminInbox';
 import AdminLinks from './AdminLinks';
 import AdminAnnouncements from './AdminAnnouncements';
 import InboxExport from './InboxExport';
+import AdminLearners from './AdminLearners';
 
 const TABS = [
   'Create student login',
+  'Learners',
   'Pending approvals',
   'Teachers & parents',
   'Announcements',
@@ -69,6 +71,7 @@ export default function AdminDashboard() {
       </div>
       <div className="mt-8">
         {tab === 'Create student login' && <CreateStudentPanel />}
+        {tab === 'Learners' && <AdminLearners />}
         {tab === 'Pending approvals' && <PendingApprovalsPanel />}
         {tab === 'Teachers & parents' && <AdminLinks />}
         {tab === 'Announcements' && <AdminAnnouncements />}
